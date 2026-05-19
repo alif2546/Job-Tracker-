@@ -1,0 +1,279 @@
+/* Dashboard page styling — Premium dark theme */
+
+.container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+  color: #ffffff;
+  padding: 0;
+}
+
+/* ============================================
+   Header — Top navigation bar
+   ============================================ */
+.header {
+  display: flex;
+  justify-content: space-between;
+  /* ↑ বাম ও ডান পাশে item গুলো রাখবে */
+  align-items: center;
+  padding: 1rem 2rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.logo {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #a78bfa;
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  /* ↑ gap = items এর মাঝে space */
+}
+
+.welcome {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+}
+
+.logoutBtn {
+  padding: 0.5rem 1rem;
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #fca5a5;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: background 0.3s;
+}
+
+.logoutBtn:hover {
+  background: rgba(239, 68, 68, 0.3);
+}
+
+/* ============================================
+   Main content area
+   ============================================ */
+.main {
+  max-width: 900px;
+  margin: 0 auto;
+  /* ↑ auto margin = horizontally center */
+  padding: 2rem;
+}
+
+/* ============================================
+   Stats bar — Job status counts
+   ============================================ */
+.statsBar {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  /* ↑ screen ছোট হলে next line এ চলে যাবে */
+}
+
+.statCard {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
+  flex: 1;
+  min-width: 120px;
+  text-align: center;
+}
+
+.statCount {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #a78bfa;
+}
+
+.statLabel {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 0.25rem;
+  text-transform: capitalize;
+}
+
+/* ============================================
+   Add Job Form
+   ============================================ */
+.addSection {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.sectionTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #e2e8f0;
+}
+
+.addForm {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.addInput {
+  flex: 1;
+  min-width: 150px;
+  padding: 0.65rem 0.75rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.3s;
+  box-sizing: border-box;
+}
+
+.addInput:focus {
+  border-color: #7c3aed;
+}
+
+.addInput::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.addBtn {
+  padding: 0.65rem 1.5rem;
+  background: linear-gradient(135deg, #7c3aed, #6d28d9);
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.3s;
+  white-space: nowrap;
+}
+
+.addBtn:hover {
+  opacity: 0.9;
+}
+
+.addBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============================================
+   Jobs list
+   ============================================ */
+.jobsSection {
+  margin-top: 1rem;
+}
+
+.jobCard {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 0.75rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: border-color 0.3s;
+}
+
+.jobCard:hover {
+  border-color: rgba(124, 58, 237, 0.3);
+}
+
+.jobInfo {
+  flex: 1;
+}
+
+.jobCompany {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #ffffff;
+}
+
+.jobRole {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.85rem;
+  margin-top: 0.15rem;
+}
+
+.jobNotes {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+  font-style: italic;
+}
+
+.jobRight {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* Status badge — আলাদা color প্রতিটা status এর জন্য */
+.badge {
+  padding: 0.3rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.badgeApplied {
+  background: rgba(59, 130, 246, 0.2);
+  color: #93c5fd;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.badgeInterview {
+  background: rgba(234, 179, 8, 0.2);
+  color: #fde047;
+  border: 1px solid rgba(234, 179, 8, 0.3);
+}
+
+.badgeOffered {
+  background: rgba(34, 197, 94, 0.2);
+  color: #86efac;
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.badgeRejected {
+  background: rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.deleteBtn {
+  padding: 0.35rem 0.7rem;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: background 0.3s;
+}
+
+.deleteBtn:hover {
+  background: rgba(239, 68, 68, 0.3);
+}
+
+.emptyState {
+  text-align: center;
+  padding: 3rem;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.95rem;
+}
+
+.emptyIcon {
+  font-size: 2.5rem;
+  margin-bottom: 0.75rem;
+}

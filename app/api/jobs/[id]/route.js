@@ -1,13 +1,33 @@
-import { Pool } from 'pg';
+import pool from '@/app/lib/db';
+import { cookies } from 'next/headers';
+import { decrypt } from '@/app/lib/session';
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-});
+// Helper: Cookie থেকে userId বের করা
+async function getUserId() {
+  const cookieStore = await cookies();
+  const session = cookieStore.get('session')?.value;
+  const payload = await decrypt(session);
+  return payload?.userId;
+}
 
+// ============================================
+// GET — একটা specific job আনবে (নিজেরটাই!)
+// ============================================
 export async function GET(request, { params }) {
   const { id } = await params;
   try {
-    const result = await pool.query('SELECT * FROM jobs WHERE id = $1', [id]);
+    const userId = await getUserId();
+    if (!userId) {
+      return Response.json({ error: 'Not authenticated' }, { status: 401 });
+    }
+
+    const result = await pool.query(
+      'SELECT * FROM jobs WHERE id = $1 AND user_id = $2',
+      [id, userId]
+    );
+    // ↑ AND user_id = $2 — শুধু নিজের job দেখতে পারবে!
+    //   অন্যের job এর id দিলেও দেখতে পাবে না
+
     if (result.rows.length === 0) {
       return Response.json({ error: 'Job not found' }, { status: 404 });
     }
@@ -17,14 +37,24 @@ export async function GET(request, { params }) {
   }
 }
 
+// ============================================
+// PATCH — Job update করবে (নিজেরটাই!)
+// ============================================
 export async function PATCH(request, { params }) {
   const { id } = await params;
   try {
+    const userId = await getUserId();
+    if (!userId) {
+      return Response.json({ error: 'Not authenticated' }, { status: 401 });
+    }
+
     const { status, notes } = await request.json();
     const result = await pool.query(
-      'UPDATE jobs SET status = COALESCE($1, status), notes = COALESCE($2, notes) WHERE id = $3 RETURNING *',
-      [status, notes, id]
+      'UPDATE jobs SET status = COALESCE($1, status), notes = COALESCE($2, notes) WHERE id = $3 AND user_id = $4 RETURNING *',
+      [status, notes, id, userId]
     );
+    // ↑ AND user_id = $4 — অন্যের job update করতে পারবে না!
+
     if (result.rows.length === 0) {
       return Response.json({ error: 'Job not found' }, { status: 404 });
     }
@@ -34,10 +64,23 @@ export async function PATCH(request, { params }) {
   }
 }
 
+// ============================================
+// DELETE — Job delete করবে (নিজেরটাই!)
+// ============================================
 export async function DELETE(request, { params }) {
   const { id } = await params;
   try {
-    const result = await pool.query('DELETE FROM jobs WHERE id = $1 RETURNING *', [id]);
+    const userId = await getUserId();
+    if (!userId) {
+      return Response.json({ error: 'Not authenticated' }, { status: 401 });
+    }
+
+    const result = await pool.query(
+      'DELETE FROM jobs WHERE id = $1 AND user_id = $2 RETURNING *',
+      [id, userId]
+    );
+    // ↑ AND user_id = $2 — অন্যের job delete করতে পারবে না!
+
     if (result.rows.length === 0) {
       return Response.json({ error: 'Job not found' }, { status: 404 });
     }

@@ -1,0 +1,144 @@
+.container {
+  /* পুরো page কে center এ রাখছি */
+  min-height: 100vh;
+  /* ↑ vh = viewport height — পুরো screen এর height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* ↑ flexbox দিয়ে horizontally ও vertically center */
+  padding: 1rem;
+
+  /* Background gradient — dark theme */
+  background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+  /* ↑ 3টা dark color মিশিয়ে gradient বানাচ্ছি
+       135deg = কোণ বরাবর color change হবে */
+}
+
+.card {
+  /* Login form এর card/box */
+  background: rgba(255, 255, 255, 0.05);
+  /* ↑ rgba = color with transparency
+       0.05 = 5% opaque — almost transparent (glassmorphism effect) */
+  backdrop-filter: blur(10px);
+  /* ↑ পিছনের background blur করে — glass এর মতো দেখায় */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 420px;
+  /* ↑ Card এর maximum width 420px — এর বেশি হবে না */
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  /* ↑ Card এর নিচে shadow — floating effect */
+}
+
+.title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #ffffff;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  color: rgba(255, 255, 255, 0.6);
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 0.9rem;
+}
+
+.formGroup {
+  /* প্রতিটা input field এর wrapper */
+  margin-bottom: 1.25rem;
+}
+
+.label {
+  display: block;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  color: #ffffff;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  /* ↑ transition = smooth animation
+       border আর shadow 0.3 second এ change হবে */
+  box-sizing: border-box;
+}
+
+.input:focus {
+  border-color: #7c3aed;
+  /* ↑ Focus করলে (click করলে) border purple হবে */
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2);
+  /* ↑ Purple glow effect */
+}
+
+.input::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.button {
+  width: 100%;
+  padding: 0.8rem;
+  background: linear-gradient(135deg, #7c3aed, #6d28d9);
+  /* ↑ Purple gradient button */
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.3s, transform 0.2s;
+  margin-top: 0.5rem;
+}
+
+.button:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  /* ↑ Hover করলে সামান্য উপরে উঠবে — interactive feel */
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.error {
+  /* Error message styling */
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #fca5a5;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.footer {
+  text-align: center;
+  margin-top: 1.5rem;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.85rem;
+}
+
+.link {
+  color: #a78bfa;
+  /* ↑ Light purple color */
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.link:hover {
+  text-decoration: underline;
+  color: #c4b5fd;
+}
