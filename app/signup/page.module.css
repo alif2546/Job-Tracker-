@@ -123,3 +123,15 @@
   text-decoration: underline;
   color: #c4b5fd;
 }
+
+/* Responsive */
+@media (max-width: 480px) {
+  .card {
+    padding: 1.5rem;
+    margin: 0.5rem;
+  }
+
+  .title {
+    font-size: 1.4rem;
+  }
+}

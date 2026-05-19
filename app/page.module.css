@@ -72,3 +72,28 @@
   background: rgba(255, 255, 255, 0.12);
   transform: translateY(-2px);
 }
+
+/* Responsive */
+@media (max-width: 480px) {
+  .heroIcon {
+    font-size: 3rem;
+  }
+
+  .title {
+    font-size: 1.75rem;
+  }
+
+  .subtitle {
+    font-size: 0.9rem;
+  }
+
+  .ctas {
+    flex-direction: column;
+  }
+
+  .primary,
+  .secondary {
+    width: 100%;
+    text-align: center;
+  }
+}

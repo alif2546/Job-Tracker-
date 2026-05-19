@@ -28,6 +28,16 @@ function getBadgeClass(status: string): string {
   }
 }
 
+// Status emoji mapping
+function getStatusEmoji(status: string): string {
+  switch (status) {
+    case 'interview': return '🎯'
+    case 'offered': return '🎉'
+    case 'rejected': return '❌'
+    default: return '📤'
+  }
+}
+
 // ============================================
 // Dashboard Page — Server Component
 // ============================================
@@ -137,6 +147,62 @@ export default async function DashboardPage() {
   }
 
   // ============================================
+  // updateStatus — Job status change করার Server Action
+  // ============================================
+  async function updateStatus(formData: FormData) {
+    'use server'
+
+    const jobId = formData.get('jobId') as string
+    const newStatus = formData.get('status') as string
+
+    // Valid status কিনা check
+    const validStatuses = ['applied', 'interview', 'offered', 'rejected']
+    if (!jobId || !newStatus || !validStatuses.includes(newStatus)) return
+
+    // Cookie থেকে userId verify
+    const cookieStore = await cookies()
+    const sessionCookie = cookieStore.get('session')?.value
+    const session = await decrypt(sessionCookie)
+    if (!session?.userId) redirect('/login')
+
+    // Status update — শুধু নিজের job!
+    await pool.query(
+      'UPDATE jobs SET status = $1 WHERE id = $2 AND user_id = $3',
+      [newStatus, jobId, session.userId]
+    )
+
+    redirect('/dashboard')
+  }
+
+  // ============================================
+  // editJob — Job edit করার Server Action
+  // ============================================
+  async function editJob(formData: FormData) {
+    'use server'
+
+    const jobId = formData.get('jobId') as string
+    const company = formData.get('company') as string
+    const role = formData.get('role') as string
+    const notes = formData.get('notes') as string
+
+    if (!jobId || !company || !role) return
+
+    // Cookie থেকে userId verify
+    const cookieStore = await cookies()
+    const sessionCookie = cookieStore.get('session')?.value
+    const session = await decrypt(sessionCookie)
+    if (!session?.userId) redirect('/login')
+
+    // Update — শুধু নিজের job!
+    await pool.query(
+      'UPDATE jobs SET company = $1, role = $2, notes = $3 WHERE id = $4 AND user_id = $5',
+      [company, role, notes || null, jobId, session.userId]
+    )
+
+    redirect('/dashboard')
+  }
+
+  // ============================================
   // JSX — Page render
   // ============================================
   return (
@@ -164,6 +230,7 @@ export default async function DashboardPage() {
         <div className={styles.statsBar}>
           {['applied', 'interview', 'offered', 'rejected'].map(status => (
             <div key={status} className={styles.statCard}>
+              <div className={styles.statEmoji}>{getStatusEmoji(status)}</div>
               <div className={styles.statCount}>{stats[status] || 0}</div>
               <div className={styles.statLabel}>{status}</div>
             </div>
@@ -203,7 +270,9 @@ export default async function DashboardPage() {
 
         {/* ========== Jobs List ========== */}
         <div className={styles.jobsSection}>
-          <h2 className={styles.sectionTitle}>📋 তোমার Jobs</h2>
+          <h2 className={styles.sectionTitle}>
+            📋 তোমার Jobs ({jobs.length})
+          </h2>
 
           {jobs.length === 0 ? (
             // কোনো job না থাকলে empty state দেখাবে
@@ -219,20 +288,39 @@ export default async function DashboardPage() {
               role: string;
               status: string;
               notes: string | null;
+              created_at: string;
             }) => (
               <div key={job.id} className={styles.jobCard}>
                 <div className={styles.jobInfo}>
                   <div className={styles.jobCompany}>{job.company}</div>
                   <div className={styles.jobRole}>{job.role}</div>
                   {job.notes && (
-                    <div className={styles.jobNotes}>{job.notes}</div>
+                    <div className={styles.jobNotes}>📝 {job.notes}</div>
                   )}
+                  <div className={styles.jobDate}>
+                    🗓️ {new Date(job.created_at).toLocaleDateString('bn-BD')}
+                  </div>
                 </div>
-                <div className={styles.jobRight}>
-                  {/* Status badge — আলাদা color */}
-                  <span className={`${styles.badge} ${getBadgeClass(job.status)}`}>
-                    {job.status}
-                  </span>
+
+                <div className={styles.jobActions}>
+                  {/* Status change dropdown */}
+                  <form action={updateStatus} className={styles.statusForm}>
+                    <input type="hidden" name="jobId" value={job.id} />
+                    <select
+                      name="status"
+                      defaultValue={job.status}
+                      className={`${styles.statusSelect} ${getBadgeClass(job.status)}`}
+                    >
+                      <option value="applied">📤 Applied</option>
+                      <option value="interview">🎯 Interview</option>
+                      <option value="offered">🎉 Offered</option>
+                      <option value="rejected">❌ Rejected</option>
+                    </select>
+                    <button type="submit" className={styles.updateBtn}>
+                      Update
+                    </button>
+                  </form>
+
                   {/* Delete button */}
                   <form action={deleteJob}>
                     <input type="hidden" name="jobId" value={job.id} />
@@ -243,6 +331,37 @@ export default async function DashboardPage() {
                     </button>
                   </form>
                 </div>
+
+                {/* ========== Edit Form (collapsible via details) ========== */}
+                <details className={styles.editDetails}>
+                  <summary className={styles.editToggle}>✏️ Edit</summary>
+                  <form action={editJob} className={styles.editForm}>
+                    <input type="hidden" name="jobId" value={job.id} />
+                    <input
+                      name="company"
+                      defaultValue={job.company}
+                      placeholder="Company নাম"
+                      className={styles.editInput}
+                      required
+                    />
+                    <input
+                      name="role"
+                      defaultValue={job.role}
+                      placeholder="Position/Role"
+                      className={styles.editInput}
+                      required
+                    />
+                    <input
+                      name="notes"
+                      defaultValue={job.notes || ''}
+                      placeholder="Notes (optional)"
+                      className={styles.editInput}
+                    />
+                    <button type="submit" className={styles.saveBtn}>
+                      💾 Save
+                    </button>
+                  </form>
+                </details>
               </div>
             ))
           )}

@@ -83,6 +83,17 @@
   flex: 1;
   min-width: 120px;
   text-align: center;
+  transition: transform 0.2s, border-color 0.3s;
+}
+
+.statCard:hover {
+  transform: translateY(-2px);
+  border-color: rgba(167, 139, 250, 0.3);
+}
+
+.statEmoji {
+  font-size: 1.5rem;
+  margin-bottom: 0.25rem;
 }
 
 .statCount {
@@ -180,17 +191,21 @@
   padding: 1rem 1.25rem;
   margin-bottom: 0.75rem;
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  transition: border-color 0.3s;
+  gap: 0.75rem;
+  transition: border-color 0.3s, transform 0.2s;
 }
 
 .jobCard:hover {
   border-color: rgba(124, 58, 237, 0.3);
+  transform: translateY(-1px);
 }
 
 .jobInfo {
   flex: 1;
+  min-width: 200px;
 }
 
 .jobCompany {
@@ -212,10 +227,80 @@
   font-style: italic;
 }
 
-.jobRight {
+.jobDate {
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 0.75rem;
+  margin-top: 0.35rem;
+}
+
+/* ============================================
+   Job Actions — status change + delete
+   ============================================ */
+.jobActions {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.statusForm {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.statusSelect {
+  padding: 0.35rem 0.5rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  appearance: auto;
+}
+
+/* Status select color variations */
+.statusSelect.badgeApplied {
+  background: rgba(59, 130, 246, 0.2);
+  color: #93c5fd;
+}
+
+.statusSelect.badgeInterview {
+  background: rgba(234, 179, 8, 0.2);
+  color: #fde047;
+}
+
+.statusSelect.badgeOffered {
+  background: rgba(34, 197, 94, 0.2);
+  color: #86efac;
+}
+
+.statusSelect.badgeRejected {
+  background: rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
+}
+
+.statusSelect option {
+  background: #1e1b4b;
+  color: #ffffff;
+}
+
+.updateBtn {
+  padding: 0.35rem 0.65rem;
+  background: rgba(124, 58, 237, 0.25);
+  border: 1px solid rgba(124, 58, 237, 0.3);
+  color: #c4b5fd;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 600;
+  transition: background 0.3s;
+  white-space: nowrap;
+}
+
+.updateBtn:hover {
+  background: rgba(124, 58, 237, 0.4);
 }
 
 /* Status badge — আলাদা color প্রতিটা status এর জন্য */
@@ -266,6 +351,84 @@
   background: rgba(239, 68, 68, 0.3);
 }
 
+/* ============================================
+   Edit section — collapsible via <details>
+   ============================================ */
+.editDetails {
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.editToggle {
+  cursor: pointer;
+  color: #a78bfa;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.3rem 0;
+  user-select: none;
+  list-style: none;
+  transition: color 0.3s;
+}
+
+.editToggle:hover {
+  color: #c4b5fd;
+}
+
+.editToggle::-webkit-details-marker {
+  display: none;
+}
+
+.editForm {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.editInput {
+  flex: 1;
+  min-width: 120px;
+  padding: 0.5rem 0.65rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  color: #ffffff;
+  font-size: 0.85rem;
+  outline: none;
+  transition: border-color 0.3s;
+  box-sizing: border-box;
+}
+
+.editInput:focus {
+  border-color: #7c3aed;
+}
+
+.editInput::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.saveBtn {
+  padding: 0.5rem 1rem;
+  background: linear-gradient(135deg, #059669, #047857);
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.3s;
+  white-space: nowrap;
+}
+
+.saveBtn:hover {
+  opacity: 0.9;
+}
+
+/* ============================================
+   Empty state
+   ============================================ */
 .emptyState {
   text-align: center;
   padding: 3rem;
@@ -276,4 +439,97 @@
 .emptyIcon {
   font-size: 2.5rem;
   margin-bottom: 0.75rem;
+}
+
+/* ============================================
+   Responsive Design — Mobile Support
+   ============================================ */
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem;
+    text-align: center;
+  }
+
+  .headerRight {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .main {
+    padding: 1rem;
+  }
+
+  .statsBar {
+    gap: 0.5rem;
+  }
+
+  .statCard {
+    min-width: 70px;
+    padding: 0.75rem;
+  }
+
+  .statEmoji {
+    font-size: 1.25rem;
+  }
+
+  .statCount {
+    font-size: 1.25rem;
+  }
+
+  .statLabel {
+    font-size: 0.7rem;
+  }
+
+  .addForm {
+    flex-direction: column;
+  }
+
+  .addInput {
+    min-width: unset;
+    width: 100%;
+  }
+
+  .addBtn {
+    width: 100%;
+  }
+
+  .jobCard {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .jobActions {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .editForm {
+    flex-direction: column;
+  }
+
+  .editInput {
+    min-width: unset;
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo {
+    font-size: 1.1rem;
+  }
+
+  .welcome {
+    font-size: 0.8rem;
+  }
+
+  .sectionTitle {
+    font-size: 1rem;
+  }
+
+  .jobCompany {
+    font-size: 0.9rem;
+  }
 }
